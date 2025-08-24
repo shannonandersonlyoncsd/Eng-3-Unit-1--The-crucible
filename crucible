@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Curriculum Dashboard: The Crucible & Early American Literature</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The application is structured as a "Curriculum Dashboard" rather than a linear document. This design prioritizes usability and conceptual understanding for the educator. The key sections are: 1) An "Overview" with a clickable "Unit at a Glance" grid for quick navigation. 2) A "Thematic Exploration" area that groups lessons by core concepts (Fear & Hysteria, Power & Oppression, Ideals & Identity) using accordions to manage information density. 3) An "Activity Toolkit" with filterable cards, allowing the user to find specific hands-on activities by intelligence type. This architecture transforms the lesson plan from a static script into a dynamic, reusable resource for planning and inspiration. -->
+    <!-- Visualization & Content Choices: Report Info: Lesson plan activities and structure. -> Goal: Organize, Inform, Compare, Filter. -> Viz/Presentation Method: Interactive grid for navigation, collapsible accordions for daily plans, filterable cards for activities, and styled HTML/CSS for diagrams (Venn, T-Chart, Social Network). -> Interaction: Click-to-scroll navigation, expand/collapse accordions, and button-based filtering for the toolkit. -> Justification: These choices make a large amount of text-based information easily scannable and accessible, promoting exploration over linear reading. The toolkit filter adds significant value by making activities reusable. -> Library/Method: Vanilla JavaScript for all interactions. No Chart.js needed as there is no quantitative data. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .nav-link.active {
+            background-color: #DCCFC1;
+            color: #4A4A4A;
+        }
+        .accordion-header.open .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .activity-card {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .activity-card.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-[#FDFBF8] sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-[#8C6B52]">Curriculum Dashboard</h1>
+                </div>
+                <nav class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-[#EAE2DA] active">Overview</a>
+                        <a href="#themes" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-[#EAE2DA]">Thematic Exploration</a>
+                        <a href="#toolkit" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-[#EAE2DA]">Activity Toolkit</a>
+                        <a href="#assessments" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-[#EAE2DA]">Assessments</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <section id="overview" class="mb-16">
+            <h2 class="text-3xl font-bold text-[#8C6B52] mb-2">Unit: The Crucible & Early American Literature</h2>
+            <p class="text-lg text-gray-600 mb-6">An interactive guide to a 14-day unit exploring themes of fear, oppression, and identity through foundational American texts and diverse, hands-on activities.</p>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-4 text-[#4A4A4A]">Unit at a Glance</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4 text-center">
+                    <!-- Day navigation grid -->
+                    <a href="#day1" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 1</p>
+                        <p class="text-xs text-gray-500">Intro & Hysteria</p>
+                    </a>
+                    <a href="#day2" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 2</p>
+                        <p class="text-xs text-gray-500">Witch Hunt Game</p>
+                    </a>
+                    <a href="#day3" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 3</p>
+                        <p class="text-xs text-gray-500">Flex Period</p>
+                    </a>
+                    <a href="#day4" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 4</p>
+                        <p class="text-xs text-gray-500">McCarthyism</p>
+                    </a>
+                    <a href="#day5" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 5</p>
+                        <p class="text-xs text-gray-500">Narrative Writing</p>
+                    </a>
+                    <a href="#day6" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 6</p>
+                        <p class="text-xs text-gray-500">Women's Repression</p>
+                    </a>
+                    <a href="#day7" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 7</p>
+                        <p class="text-xs text-gray-500">Clash of Ideals</p>
+                    </a>
+                    <a href="#day8" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 8</p>
+                        <p class="text-xs text-gray-500">Flex & Vocab</p>
+                    </a>
+                    <a href="#day9" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 9</p>
+                        <p class="text-xs text-gray-500">Slave Trade</p>
+                    </a>
+                    <a href="#day10" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 10</p>
+                        <p class="text-xs text-gray-500">Boarding Schools</p>
+                    </a>
+                    <a href="#day11" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 11</p>
+                        <p class="text-xs text-gray-500">Flex & Prep</p>
+                    </a>
+                    <a href="#day12" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 12</p>
+                        <p class="text-xs text-gray-500">Assessment</p>
+                    </a>
+                    <a href="#day13" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 13</p>
+                        <p class="text-xs text-gray-500">Film Study</p>
+                    </a>
+                    <a href="#day14" class="day-nav-item p-3 bg-gray-50 hover:bg-[#EAE2DA] rounded-lg transition-colors">
+                        <p class="font-bold text-sm">Day 14</p>
+                        <p class="text-xs text-gray-500">Reflection</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="mb-16">
+            <h2 class="text-3xl font-bold text-[#8C6B52] mb-6">Thematic Exploration</h2>
+            
+            <!-- Theme 1: Fear & Hysteria -->
+            <div class="mb-8">
+                <h3 class="text-2xl font-semibold mb-4 text-[#4A4A4A]">Theme 1: Fear & Hysteria</h3>
+                <p class="mb-4 text-gray-600">This theme explores the origins and consequences of collective fear, drawing direct parallels between the Salem Witch Trials in *The Crucible* and the Red Scare of the 1950s. Students experience these concepts through simulation, analysis, and historical comparison.</p>
+                <div class="space-y-2">
+                    <!-- Day 1 Accordion -->
+                    <div id="day1" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="accordion-header cursor-pointer p-4 flex justify-between items-center">
+                            <h4 class="font-semibold">Day 1: Intro to Puritanism & Mass Hysteria</h4>
+                            <span class="accordion-icon transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="accordion-content hidden p-4 border-t border-gray-200">
+                            <p><strong>🔔 Bell Ringer:</strong> The Human Rumor Mill game to demonstrate information distortion.</p>
+                            <p><strong>💡 Mini-Lesson:</strong> Gallery Walk with visuals for Puritanism, Enlightenment, and Mass Hysteria.</p>
+                            <p><strong>✍️ Guided Practice:</strong> Collaborative "Social Network Mapping" of Act I characters.</p>
+                            <p><strong>✅ Wrap-up:</strong> Exit ticket asking for a key quote that captures the mood of Act I.</p>
+                        </div>
+                    </div>
+                    <!-- Day 2 Accordion -->
+                    <div id="day2" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="accordion-header cursor-pointer p-4 flex justify-between items-center">
+                            <h4 class="font-semibold">Day 2: Deepening Puritan Beliefs & The Witch Hunt</h4>
+                            <span class="accordion-icon transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="accordion-content hidden p-4 border-t border-gray-200">
+                            <p><strong>🔔 Bell Ringer:</strong> Group vocabulary definition activity using context clues from Act I.</p>
+                            <p><strong>💡 Main Activity:</strong> The Hysteria Simulation ("Witch Hunt" game) where students experience baseless accusations and a mock trial.</p>
+                            <p><strong>✍️ Independent Work:</strong> Create a visual "Character Profile" for a key figure from Act I.</p>
+                        </div>
+                    </div>
+                     <!-- Day 4 Accordion -->
+                    <div id="day4" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="accordion-header cursor-pointer p-4 flex justify-between items-center">
+                            <h4 class="font-semibold">Day 4: The Red Scare & McCarthyism</h4>
+                            <span class="accordion-icon transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="accordion-content hidden p-4 border-t border-gray-200">
+                            <p><strong>🔔 Bell Ringer:</strong> "Human Timeline" activity using a clip on the Cold War.</p>
+                            <p><strong>💡 Mini-Lesson:</strong> Venn Diagram card sort comparing Salem and McCarthyism.</p>
+                            <p><strong>✍️ Guided Practice:</strong> "Living Tableaux" to represent key scenes of paranoia from Act II.</p>
+                            <p><strong>✅ Wrap-up:</strong> "Paranoia Journal" entry noting lines that build fear.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Theme 2: Power & Oppression -->
+            <div class="mb-8">
+                <h3 class="text-2xl font-semibold mb-4 text-[#4A4A4A]">Theme 2: Power & Oppression</h3>
+                <p class="mb-4 text-gray-600">This theme examines systems of oppression throughout American history, focusing on the roles of women, the tragedy of the slave trade, and the cultural impact of Indian boarding schools. Students connect these historical contexts to literary representations.</p>
+                <div class="space-y-2">
+                    <!-- Day 6 Accordion -->
+                    <div id="day6" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="accordion-header cursor-pointer p-4 flex justify-between items-center">
+                            <h4 class="font-semibold">Day 6: Repression of Women & 'The Story of an Hour'</h4>
+                            <span class="accordion-icon transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="accordion-content hidden p-4 border-t border-gray-200">
+                           <p><strong>🔔 Bell Ringer:</strong> Quick-draw sketch of Puritan expectations for women.</p>
+                           <p><strong>💡 Mini-Lesson:</strong> Gallery Walk of 19th-century visuals showing women's roles.</p>
+                           <p><strong>✍️ Guided Practice:</strong> "Musical Reading" of "The Story of an Hour" to track mood shifts.</p>
+                           <p><strong>✅ Wrap-up:</strong> Venn Diagram comparing limitations on Puritan women and Mrs. Mallard.</p>
+                        </div>
+                    </div>
+                    <!-- Day 9 Accordion -->
+                    <div id="day9" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="accordion-header cursor-pointer p-4 flex justify-between items-center">
+                            <h4 class="font-semibold">Day 9: The African Slave Trade & 'Homegoing'</h4>
+                            <span class="accordion-icon transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="accordion-content hidden p-4 border-t border-gray-200">
+                           <p><strong>🔔 Bell Ringer:</strong> "Human Barometer" activity to gauge reactions to historical statements.</p>
+                           <p><strong>💡 Mini-Lesson:</strong> "Sensory Dive" into an excerpt from *Homegoing*.</p>
+                           <p><strong>✍️ Guided Practice:</strong> Literary Circles with assigned roles to analyze the text.</p>
+                           <p><strong>✅ Wrap-up:</strong> Visual reflection or symbolic art piece connecting personal narrative to history.</p>
+                        </div>
+                    </div>
+                    <!-- Day 10 Accordion -->
+                    <div id="day10" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="accordion-header cursor-pointer p-4 flex justify-between items-center">
+                            <h4 class="font-semibold">Day 10: Indian Boarding Schools</h4>
+                            <span class="accordion-icon transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="accordion-content hidden p-4 border-t border-gray-200">
+                           <p><strong>🔔 Bell Ringer:</strong> "Silent Gallery" walk with images and quotes from boarding schools.</p>
+                           <p><strong>💡 Mini-Lesson:</strong> "Mapping Displacement" activity showing tribal lands and school locations.</p>
+                           <p><strong>✍️ Guided Practice:</strong> "Quote Carousel" where groups interpret and build on primary source quotes.</p>
+                           <p><strong>✅ Wrap-up:</strong> Poetic Response to an image or quote from the lesson.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Theme 3: Ideals & Identity -->
+            <div>
+                <h3 class="text-2xl font-semibold mb-4 text-[#4A4A4A]">Theme 3: Ideals & Identity</h3>
+                <p class="mb-4 text-gray-600">This theme centers on the formation of American ideals and personal identity through foundational documents and narrative writing. Students compare political philosophies and develop their own creative voices by analyzing and practicing narrative techniques.</p>
+                <div class="space-y-2">
+                     <!-- Day 5 Accordion -->
+                    <div id="day5" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="accordion-header cursor-pointer p-4 flex justify-between items-center">
+                            <h4 class="font-semibold">Day 5: Narrative Writing & Character Analysis</h4>
+                            <span class="accordion-icon transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="accordion-content hidden p-4 border-t border-gray-200">
+                            <p><strong>🔔 Bell Ringer:</strong> "Character in the Hot Seat" role-playing activity.</p>
+                            <p><strong>💡 Mini-Lesson:</strong> "Rhetoric Scavenger Hunt" in Act II to find literary devices.</p>
+                            <p><strong>✍️ Guided Practice:</strong> "Courtroom Mock Trial" improvisation of the Act III scene.</p>
+                            <p><strong>✅ Wrap-up:</strong> "One-Pager" visual summary of a turning point in Act III.</p>
+                        </div>
+                    </div>
+                    <!-- Day 7 Accordion -->
+                    <div id="day7" class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="accordion-header cursor-pointer p-4 flex justify-between items-center">
+                            <h4 class="font-semibold">Day 7: A Clash of Ideals: Iroquois vs. Declaration</h4>
+                            <span class="accordion-icon transition-transform duration-300">▼</span>
+                        </div>
+                        <div class="accordion-content hidden p-4 border-t border-gray-200">
+                           <p><strong>🔔 Bell Ringer:</strong> Think-Pair-Share on the Declaration of Independence.</p>
+                           <p><strong>💡 Mini-Lesson:</strong> "Document Detectives" group analysis of excerpts.</p>
+                           <p><strong>✍️ Guided Practice:</strong> Class construction of a "Physical T-Chart" on the board.</p>
+                           <p><strong>✅ Wrap-up:</strong> Create a "Found Poem" using words from both documents.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="toolkit" class="mb-16">
+            <h2 class="text-3xl font-bold text-[#8C6B52] mb-2">Activity Toolkit</h2>
+            <p class="text-gray-600 mb-6">Filter the unit's hands-on activities by primary intelligence type to easily find engaging exercises for any learner.</p>
+            
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button class="filter-btn bg-[#DCCFC1] px-4 py-2 rounded-full text-sm font-semibold" data-filter="all">All</button>
+                <button class="filter-btn bg-white hover:bg-gray-100 border border-gray-200 px-4 py-2 rounded-full text-sm" data-filter="kinesthetic">Bodily-Kinesthetic</button>
+                <button class="filter-btn bg-white hover:bg-gray-100 border border-gray-200 px-4 py-2 rounded-full text-sm" data-filter="interpersonal">Interpersonal</button>
+                <button class="filter-btn bg-white hover:bg-gray-100 border border-gray-200 px-4 py-2 rounded-full text-sm" data-filter="visual">Visual-Spatial</button>
+                <button class="filter-btn bg-white hover:bg-gray-100 border border-gray-200 px-4 py-2 rounded-full text-sm" data-filter="linguistic">Linguistic</button>
+                <button class="filter-btn bg-white hover:bg-gray-100 border border-gray-200 px-4 py-2 rounded-full text-sm" data-filter="logical">Logical-Mathematical</button>
+                <button class="filter-btn bg-white hover:bg-gray-100 border border-gray-200 px-4 py-2 rounded-full text-sm" data-filter="musical">Musical</button>
+                <button class="filter-btn bg-white hover:bg-gray-100 border border-gray-200 px-4 py-2 rounded-full text-sm" data-filter="intrapersonal">Intrapersonal</button>
+            </div>
+
+            <div id="activity-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="activity-card bg-white p-4 rounded-lg shadow-sm border border-gray-200" data-type="kinesthetic interpersonal">
+                    <h4 class="font-bold">The Human Rumor Mill</h4>
+                    <p class="text-sm text-gray-600">A game where a message is whispered around a circle to show how information gets distorted. (Day 1)</p>
+                </div>
+                <div class="activity-card bg-white p-4 rounded-lg shadow-sm border border-gray-200" data-type="kinesthetic interpersonal">
+                    <h4 class="font-bold">The Hysteria Simulation</h4>
+                    <p class="text-sm text-gray-600">A mock "witch hunt" where students experience baseless accusation and a group trial. (Day 2)</p>
+                </div>
+                <div class="activity-card bg-white p-4 rounded-lg shadow-sm border border-gray-200" data-type="kinesthetic logical">
+                    <h4 class="font-bold">Human Timeline</h4>
+                    <p class="text-sm text-gray-600">Students physically arrange themselves to represent a historical timeline of the Red Scare. (Day 4)</p>
+                </div>
+                <div class="activity-card bg-white p-4 rounded-lg shadow-sm border border-gray-200" data-type="kinesthetic visual interpersonal">
+                    <h4 class="font-bold">Living Tableaux</h4>
+                    <p class="text-sm text-gray-600">Groups create frozen scenes ("tableaux") to represent key conflicts and symbols from Act II. (Day 4)</p>
+                </div>
+                <div class="activity-card bg-white p-4 rounded-lg shadow-sm border border-gray-200" data-type="interpersonal linguistic kinesthetic">
+                    <h4 class="font-bold">Courtroom Mock Trial</h4>
+                    <p class="text-sm text-gray-600">Students take on roles from the Act III courtroom scene and improvise arguments. (Day 5)</p>
+                </div>
+                <div class="activity-card bg-white p-4 rounded-lg shadow-sm border border-gray-200" data-type="visual linguistic">
+                    <h4 class="font-bold">Gallery Walk</h4>
+                    <p class="text-sm text-gray-600">Students circulate the room to analyze images and text related to a historical period. (Days 1, 6)</p>
+                </div>
+                 <div class="activity-card bg-white p-4 rounded-lg shadow-sm border border-gray-200" data-type="musical linguistic">
+                    <h4 class="font-bold">Musical Reading</h4>
+                    <p class="text-sm text-gray-600">Listen to contrasting musical pieces while reading a text to identify and feel mood shifts. (Day 6)</p>
+                </div>
+                <div class="activity-card bg-white p-4 rounded-lg shadow-sm border border-gray-200" data-type="logical interpersonal">
+                    <h4 class="font-bold">Document Detectives</h4>
+                    <p class="text-sm text-gray-600">Small groups analyze excerpts of historical documents to deduce their core message and style. (Day 7)</p>
+                </div>
+                <div class="activity-card bg-white p-4 rounded-lg shadow-sm border border-gray-200" data-type="intrapersonal linguistic">
+                    <h4 class="font-bold">Found Poem</h4>
+                    <p class="text-sm text-gray-600">Create a new poem using only words and phrases taken directly from source texts. (Day 7)</p>
+                </div>
+                <div class="activity-card bg-white p-4 rounded-lg shadow-sm border border-gray-200" data-type="visual intrapersonal">
+                    <h4 class="font-bold">One-Pager / Visual Reflection</h4>
+                    <p class="text-sm text-gray-600">A single-page visual summary of a key concept, character, or event using drawings and quotes. (Days 5, 9)</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="assessments" class="mb-8">
+            <h2 class="text-3xl font-bold text-[#8C6B52] mb-6">Assessments & Final Activities</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                 <!-- Flex Days -->
+                <div id="day3" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h4 class="font-bold text-lg mb-2">Day 3 & 8: Flex Periods</h4>
+                    <p class="text-sm text-gray-600">Student-choice activities including vocabulary games, grammar review, or quiet reading time to reinforce skills.</p>
+                </div>
+                <!-- Assessment Prep -->
+                <div id="day11" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h4 class="font-bold text-lg mb-2">Day 11: Assessment Prep</h4>
+                    <p class="text-sm text-gray-600">A flexible workshop day for narrative writing prep, a competitive review game, or individual teacher conferences.</p>
+                </div>
+                <!-- Assessment -->
+                <div id="day12" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h4 class="font-bold text-lg mb-2">Day 12: Narrative Writing Assessment</h4>
+                    <p class="text-sm text-gray-600">A 90-minute in-class writing assessment where students draft a complete narrative based on a unit theme.</p>
+                </div>
+                <!-- Film -->
+                <div id="day13" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h4 class="font-bold text-lg mb-2">Day 13: Film Adaptation</h4>
+                    <p class="text-sm text-gray-600">Viewing of *The Crucible* film with a "Cinematic Scrutiny Guide" to compare it with the play.</p>
+                </div>
+                <!-- Reflection -->
+                <div id="day14" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h4 class="font-bold text-lg mb-2">Day 14: Final Reflection</h4>
+                    <p class="text-sm text-gray-600">A final Socratic Seminar discussing the unit's texts and themes, connecting them to modern society.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Accordion functionality
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    header.classList.toggle('open');
+                    content.classList.toggle('hidden');
+                });
+            });
+
+            // Smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Activity filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const activityCards = document.querySelectorAll('.activity-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filter = button.dataset.filter;
+
+                    // Update button styles
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('bg-[#DCCFC1]');
+                        btn.classList.add('bg-white', 'hover:bg-gray-100', 'border', 'border-gray-200');
+                    });
+                    button.classList.add('bg-[#DCCFC1]');
+                    button.classList.remove('bg-white', 'hover:bg-gray-100', 'border', 'border-gray-200');
+
+                    // Filter cards
+                    activityCards.forEach(card => {
+                        const cardTypes = card.dataset.type.split(' ');
+                        if (filter === 'all' || cardTypes.includes(filter)) {
+                            card.classList.remove('hidden');
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // Active nav link on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+</body>
+</html>
